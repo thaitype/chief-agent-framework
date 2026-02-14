@@ -50,6 +50,7 @@ You must:
 - treat `.chief/_rules` as global governance
 - treat `.chief/milestone-*` as the active unit of work
 - keep all planning artifacts in `.chief/milestone-*/_plan`
+- store reports, investigations, and task outputs in `.chief/milestone-*/_report`
 
 ---
 
@@ -67,6 +68,7 @@ Read:
 - `.chief/<milestone>/_goal/**`
 - `.chief/<milestone>/_contract/**` (if present)
 - `.chief/<milestone>/_plan/_todo.md` (if present)
+- `.chief/<milestone>/_report/**` (reference material: reports, investigations, task outputs)
 
 ---
 

@@ -31,8 +31,7 @@ The `.chief` directory contains all structured planning, rules, goals, and execu
     ├── _contract
     ├── _goal
     ├── _plan
-    ├── task-1
-    └── task-2
+    └── _report
 ```
 
 Multiple milestones may exist.
@@ -152,8 +151,7 @@ milestone-X
 ├── _contract
 ├── _goal
 ├── _plan
-├── task-1
-└── task-2
+└── _report
 ```
 
 ## `_contract`
@@ -176,9 +174,9 @@ More detailed than global goals but must not conflict.
 
 Execution plan and task list for this milestone.
 
-## task folders
+## `_report`
 
-Each task folder contains implementation details and outputs related to that task.
+Reference material produced during the milestone. Examples: bug investigation reports, diagnostic reports, review results, performance analyses, task output folders. Not plans, contracts, or goals -- just reference documents.
 
 ---
 
@@ -209,9 +207,9 @@ Chief-agent must update `_todo.md` by marking completed tasks:
 
 Tasks should be kept small and clear.
 
-## Task Output 
+## Task Output
 
-each task can have file output when needed, the output should be placed at `.chief/milestone-X/task-Y/`
+Each task can have file output when needed, the output should be placed at `.chief/milestone-X/_report/task-Y/`
 
 ---
 
