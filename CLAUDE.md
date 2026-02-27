@@ -232,56 +232,95 @@ Detailed rules belong in `.chief/_rules`.
 
 ---
 
-# Agents
+# 3-Agent Architecture
 
-## 1. chief-agent (Planner / Orchestrator)
+## 1. Chief-Agent (Planner / Orchestrator)
 
-Recommended model: most capable available (e.g. Opus)
+The decision-making brain.
 
 Responsibilities:
 
-* Read CLAUDE.md and all rules
-* Analyze milestone goals
-* Create `_plan`
-* Break work into small tasks (3–5 at a time)
-* Assign work to builder-agent and tester-agent
-* Review completed work
-* Update `_todo.md`
-* Decide next steps
+- Read `CLAUDE.md`
+- Read global rules under `.chief/_rules`
+- Analyze milestone goals and contracts
+- Create and maintain `_plan`
+- Break work into small tasks (3–5 at a time)
+- Delegate implementation to builder-agent
+- Delegate long-running validation to tester-agent
+- Update `_todo.md`
+- Decide next steps
 
-Chief-agent is the communication bridge between humans and other agents.
-
-### Critical responsibility
-
-Chief-agent must always evaluate:
-
-> Are there multiple valid implementation paths?
-
-If yes:
-
-* present options to human
-* explain pros/cons
-* suggest rule clarification if needed
-* propose updates to `_rules` or milestone goals
-
-Chief-agent must actively reduce ambiguity.
+Chief-agent resolves ambiguity, ensures rule compliance, and minimizes unnecessary human intervention.
 
 ---
 
-## 2. builder-agent (Implementer)
+## 2. Builder-Agent (Implementer)
 
-Recommended model: fast + capable (e.g. Sonnet)
+The fast execution engine.
 
 Responsibilities:
 
-* Implement tasks assigned by chief-agent
-* Follow CLAUDE.md
-* Follow global rules
-* Follow milestone contracts and goals
-* Write correct and maintainable code
+- Implement tasks defined in `.chief/<milestone>/_plan/task-X.md`
+- Follow `.chief/_rules/_standard`
+- Fix type/lint/test fallout autonomously
+- Run short deterministic verification commands
+- Commit code after verification passes
 
-After completion:
-→ return results to chief-agent
+Builder-agent handles:
+
+- Unit tests
+- Type checks
+- Lint
+- Local deterministic build verification
+
+Builder-agent does NOT:
+
+- Perform external acceptance testing
+- Validate real environments
+- Make architecture decisions
+- Modify contracts unless explicitly allowed
+
+---
+
+## 3. Tester-Agent (Long-Running Verifier)
+
+The integration and stability validator.
+
+Responsibilities:
+
+- Execute long-running or non-deterministic tests
+- Validate UI flows
+- Validate API integrations
+- Validate authentication flows (e.g. Entra)
+- Perform integration and end-to-end testing
+- Validate environment-level behavior
+
+Tester-agent does NOT:
+
+- Implement code
+- Patch bugs
+- Refactor systems
+
+Tester-agent reports findings back to chief-agent for decision.
+
+---
+
+# Responsibility Separation
+
+| Responsibility Type        | Builder-Agent | Tester-Agent |
+|----------------------------|---------------|--------------|
+| Unit tests                 | ✅            | ❌           |
+| Type/lint/build checks     | ✅            | ❌           |
+| Integration testing        | ❌            | ✅           |
+| UI testing                 | ❌            | ✅           |
+| External auth validation   | ❌            | ✅           |
+| Cloud/environment checks   | ❌            | ✅           |
+| Code fixes                 | ✅            | ❌           |
+| Architecture decisions     | ❌            | ❌ (Chief)   |
+
+This separation prevents slow loops and keeps execution stable.
+
+---
 
 # Core Design Philosophy
 
