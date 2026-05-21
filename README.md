@@ -25,22 +25,22 @@ Built for developers already using AI coding agents who want a structured workfl
 
 ## Supported Coding Agents
 
-| Coding Agent                                                    | Integration                                           | Notes                                  |
-| --------------------------------------------------------------- | ----------------------------------------------------- | -------------------------------------- |
-| Claude Code                                                     | `CLAUDE.md → AGENTS.md` symlink + `.claude/` symlinks | Full support (agents + skills)         |
-| GitHub Copilot                                                  | `.github/agents/` symlinks or copies                  | Full support (agents)                  |
-| OpenCode, Codex, Cursor, Gemini CLI, Amp, Windsurf, Kiro, Aider | Reads `AGENTS.md` natively                            | Should work out of the box (untested ⚠️ — [open an issue](https://github.com/thaitype/chief/issues) if you hit problems) |
+| Coding Agent                                                    | Integration                                                | Notes                                                                                                                   |
+| --------------------------------------------------------------- | ---------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
+| Claude Code                                                     | `CLAUDE.md → AGENTS.md` symlink + `.claude/` symlinks | Full support (agents + skills)                                                                                          |
+| GitHub Copilot                                                  | `.github/agents/` symlinks or copies                     | Full support (agents)                                                                                                   |
+| OpenCode, Codex, Cursor, Gemini CLI, Amp, Windsurf, Kiro, Aider | Reads `AGENTS.md` natively                               | Should work out of the box (untested ⚠️ —[open an issue](https://github.com/thaitype/chief/issues) if you hit problems) |
 
 ## Setup
 
 Current version is v3. If you have v1 or v2 installed, follow the [upgrade instructions](#upgrading) below.
 
 ```bash
-npx skills@latest add thaitype/chief --skill chief-install
+npx skills@latest add thaitype/chief#release/v3 --skill chief-install
 ```
 
 ```
-/chief-install
+/chief-install release/v3
 ```
 
 The skill asks which coding agent you use, picks the install mode, copies framework files, and sets up everything.
@@ -94,12 +94,12 @@ Milestones can be simple (`milestone-1`, `milestone-2`) or reference your projec
 
 ## Agents at a Glance
 
-| Agent             | When it works                                                                   | When to call manually                                       |
-| ----------------- | ------------------------------------------------------------------------------- | ----------------------------------------------------------- |
-| chief-agent       | You start here. Give it a goal.                                                 | Plan work, review progress, or change direction             |
-| review-plan-agent | Optional. Not part of the automatic flow.                                       | When you want to validate a plan for contradictions         |
-| builder-agent     | Chief delegates tasks to it after plan is reviewed                              | When a task is ready and you want to start building         |
-| tester-agent      | Only when you request it — not part of the automatic flow                        | When you need integration/E2E testing beyond unit tests     |
+| Agent             | When it works                                              | When to call manually                                   |
+| ----------------- | ---------------------------------------------------------- | ------------------------------------------------------- |
+| chief-agent       | You start here. Give it a goal.                            | Plan work, review progress, or change direction         |
+| review-plan-agent | Optional. Not part of the automatic flow.                  | When you want to validate a plan for contradictions     |
+| builder-agent     | Chief delegates tasks to it after plan is reviewed         | When a task is ready and you want to start building     |
+| tester-agent      | Only when you request it — not part of the automatic flow | When you need integration/E2E testing beyond unit tests |
 
 ## Quick Start — Pick Your Style
 
@@ -140,9 +140,9 @@ You can combine both. Plan with review gates, then switch to autopilot for execu
 
 ## Common Prompts
 
-| What you want                          | What to type                                              |
-| -------------------------------------- | --------------------------------------------------------- |
-| Plan a milestone step-by-step          | `/chief-plan`                                         |
+| What you want                          | What to type                                                |
+| -------------------------------------- | ----------------------------------------------------------- |
+| Plan a milestone step-by-step          | `/chief-plan`                                             |
 | Run milestone on autopilot             | `/chief-autopilot`                                        |
 | Run milestone on autopilot (safe mode) | `/chief-autopilot safe`                                   |
 | Run a retrospective                    | `/chief-retro`                                            |
@@ -193,13 +193,13 @@ Skip detailed planning — let chief create TODO and delegate to builder on the 
 Install the upgrade skill:
 
 ```bash
-npx skills@latest add thaitype/chief --skill chief-upgrade
+npx skills@latest add thaitype/chief#release/v3 --skill chief-upgrade
 ```
 
 Then run:
 
 ```
-/chief-upgrade
+/chief-upgrade release/v3
 ```
 
 With no arguments, it upgrades to the latest stable release. Or specify a version:
@@ -214,12 +214,14 @@ The skill compares your current files against the target version, creates an upg
 ### Coming from v2
 
 Skills were renamed in v3:
+
 - `/install-chief` → `/chief-install`
 - `/upgrade-chief` → `/chief-upgrade`
 
 If you have old skills installed, remove them and install the new ones:
+
 ```bash
-npx skills@latest add thaitype/chief --skill chief-upgrade
+npx skills@latest add thaitype/chief#release/v3 --skill chief-upgrade
 ```
 
 ### Coming from v1
@@ -233,6 +235,7 @@ See the [v1 docs](https://github.com/thaitype/chief-agent-framework/tree/release
 - v3 — Renamed to Chief as part of the [chief-tribe](https://github.com/thaitype/chief-tribe) ecosystem. Skills renamed to `chief-` prefix (`chief-install`, `chief-upgrade`). Repo moved to [`thaitype/chief`](https://github.com/thaitype/chief).
 
 ## Branches
+
 - `release/v1` — Stable v1 release
 - `release/v2` — Stable v2 release
 - `main` - latest stable release (currently v3)
