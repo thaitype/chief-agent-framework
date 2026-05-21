@@ -1,271 +1,196 @@
 # Chief ⚔️
 
+![](https://img.shields.io/badge/chief_version-v4.0.0-blue)
+
 **[English](README.md)** | **ไทย**
 
-Portable framework ที่ช่วยลดภาระทางสมองจากการใช้ AI coding agents — โดยไม่ทิ้งคุณภาพหรือความเร็วในการทำงาน
+Workflow ที่มีโครงสร้างสำหรับ AI coding agents ติดตั้งในโปรเจกต์ใดก็ได้ กำหนด rules ครั้งเดียว แล้วหยุดอธิบาย codebase ซ้ำทุก chat
 
-> Chief เป็นส่วนหนึ่งของระบบนิเวศ [chief-tribe](https://github.com/thaitype/chief-tribe) โดยใช้ [elder](https://github.com/thaitype/elder) เป็น behavioral baseline
+> Chief เป็นส่วนหนึ่งของระบบนิเวศ [chief-tribe](https://github.com/thaitype/chief-tribe) โดยใช้ [sage](https://github.com/thaitype/sage) เป็น behavioral baseline
 
-> เบื้องหลังของ Chief เป็นแค่ไฟล์ markdown มันแค่กำหนดโครงสร้างให้ AI agents ของคุณทำตาม
+## ทำไมถึงมี Chief
 
-> คุณกำลังอ่านเอกสาร v3 หากคุณติดตั้ง v1 หรือ v2 อยู่ ให้ทำตาม[คำแนะนำการอัปเกรด](#การอัปเกรด)ด้านล่าง หรือดู[เอกสาร v1](https://github.com/thaitype/chief-agent-framework/tree/release/v1) Chief เดิมรู้จักในชื่อ `chief-agent-framework`
+ทุกโปรเจกต์มี context — การตัดสินใจเมื่อหกเดือนที่แล้ว, workaround ที่แปลกๆ, เหตุผลที่ว่า "ทำไมถึงทำแบบนี้" สิ่งเหล่านี้อยู่ในหัวคุณ ทุก chat ใหม่เริ่มต้นจากศูนย์ คุณก็อธิบายซ้ำ แล้วก็ซ้ำอีก
 
-Chief คือ structured workflow สำหรับ AI coding agents คุณกำหนด rules และ goals ครั้งเดียว แล้ว agents จัดการวางแผน สร้าง และตรวจสอบข้ามหลาย session — ทีละ milestone
+Chief หยุดสิ่งนั้น ให้ทุกโปรเจกต์มีรูปร่างเดิม — `AGENTS.md` สำหรับ rules, `.chief/_rules/` สำหรับ standards, `.chief/milestone-N/` สำหรับงานปัจจุบัน Agents รู้ว่าจะอ่านที่ไหนและเขียนที่ไหน prompt ของคุณย่อเหลือแค่ประโยคเดียว
 
-เวลาใช้ AI ในโปรเจกต์จริง ความท้าทายไม่ใช่การเขียนโค้ด — แต่เป็นการตัดสินใจตลอดเวลา จะใช้ architecture แบบไหน, pattern อะไร, จะไปทิศทางไหนต่อ ทุกครั้งที่คุยกับ AI คือการตัดสินใจ ยิ่งรีบ ยิ่งข้าม ยิ่งสร้าง tech debt
+→ [ทำไมถึงมี Chief](docs/manual/explanation/why-chief.md)
 
-Chief ย้ายการตัดสินใจเหล่านั้นเข้าสู่ระบบ:
+## เริ่มต้นด่วน
 
-- Planning agent แบ่งงานเป็น milestones และ tasks
-- Builder agent ลงมือทำ
-- Tester agent ตรวจสอบผลลัพธ์
-- Review agent ตรวจ plan หาข้อขัดแย้งเมื่อคุณต้องการความเห็นที่สอง
-
-สร้างมาสำหรับนักพัฒนาที่ใช้ AI coding agent อยู่แล้ว และต้องการ workflow ที่มีโครงสร้างแทนการ prompt แบบ ad-hoc อ่านเพิ่มเติมเกี่ยวกับ[ปรัชญาการออกแบบ](docs/philosophy.md)
-
-## Coding Agents ที่รองรับ
-
-| Coding Agent                                                    | Integration                                           | หมายเหตุ                                |
-| --------------------------------------------------------------- | ----------------------------------------------------- | --------------------------------------- |
-| Claude Code                                                     | `CLAUDE.md → AGENTS.md` symlink + `.claude/` symlinks | รองรับเต็มรูปแบบ (agents + skills)       |
-| GitHub Copilot                                                  | `.github/agents/` symlinks หรือ copies                | รองรับเต็มรูปแบบ (agents)                |
-| OpenCode, Codex, Cursor, Gemini CLI, Amp, Windsurf, Kiro, Aider | อ่าน `AGENTS.md` โดยตรง                               | ควรใช้งานได้ทันที (ยังไม่ได้ทดสอบ ⚠️ — [เปิด issue](https://github.com/thaitype/chief/issues) หากพบปัญหา) |
-
-## การติดตั้ง
-
-เวอร์ชันปัจจุบันคือ v3 หากคุณติดตั้ง v1 หรือ v2 อยู่ ให้ทำตาม[คำแนะนำการอัปเกรด](#การอัปเกรด)ด้านล่าง
+**ขั้นที่ 1 — ติดตั้ง skills:**
 
 ```bash
-npx skills@latest add thaitype/chief --skill chief-install
+npx skills@latest add thaitype/chief
 ```
+
+เลือก skills ที่ต้องการ ต้องมี `chief-install` รวมอยู่ด้วย
+
+**ขั้นที่ 2 — รัน `/chief-install` ใน agent ของคุณ:**
 
 ```
 /chief-install
 ```
 
-Skill จะถามว่าคุณใช้ coding agent ตัวไหน เลือกโหมดติดตั้ง คัดลอกไฟล์ framework และตั้งค่าทุกอย่าง
+จะถามว่าใช้ coding agent ตัวไหน จะ symlink หรือ copy และจะติดตั้ง subagents ไหม แค่นั้นเอง
 
-สำหรับการติดตั้งแบบ manual (shell script, git clone) ดู [docs/manual-install.md](docs/manual-install.md)
+**ขั้นที่ 3 — ตั้งค่า project context (ไม่บังคับ):**
 
-> **ผู้ใช้ Windows:** โหมด Link ต้องเปิด Developer Mode และตั้ง `git config --global core.symlinks true` สคริปต์ตั้งค่าจะตรวจจับอัตโนมัติ — ถ้า symlinks ใช้ไม่ได้จะ fallback เป็นโหมด copy
+```
+/chief-init
+```
 
-## โครงสร้างไดเรกทอรี
+สัมภาษณ์เรื่อง stack และ dev commands แล้วเขียนไปที่ `.chief/project.md` จะข้ามและเขียนไฟล์เองทีหลังก็ได้
 
-หลังติดตั้ง โปรเจกต์ของคุณจะมี:
+→ [Tutorial เต็ม: milestone แรกของคุณ](docs/manual/tutorials/your-first-milestone.md)→ [ตัวเลือกการติดตั้งแบบ manual](docs/manual/how-to/install.md)
+
+> **ผู้ใช้ Windows:** Symlink mode ต้องเปิด Developer Mode และตั้ง `git config --global core.symlinks true` install skill จะตรวจจับอัตโนมัติและ fallback เป็น copy mode
+
+## วิธีการทำงานของ Chief
+
+Chief คือไฟล์ markdown ใน 3 ที่:
 
 ```
 project/
-├── AGENTS.md               # กฎของ framework — ไฟล์หลัก (อำนาจสูงสุด)
-├── CLAUDE.md → AGENTS.md   # Symlink (เฉพาะ Claude Code)
-├── .github/agents/        # Agent definitions สำหรับ Copilot (symlinks หรือ copies)
-├── .agents/               # Agent definitions หลัก (ไม่ผูกกับ coding agent ใดตัวหนึ่ง)
-│   ├── agents/            # คำนิยามบทบาทของ agent
-│   └── skills/            # Skills ที่ติดตั้งได้
-├── .chief/                # Plans, rules, milestones
-│   ├── project.md         # Config เฉพาะโปรเจกต์ (tech stack, commands)
-│   ├── MANUAL.md          # คู่มือการใช้งาน framework
-│   ├── _rules/            # กฎกลาง
-│   └── milestone-1/       # Milestone แรก
-├── .claude/               # Claude Code integration (symlinks)
-│   ├── agents/ → .agents/agents/*
-│   └── skills/ → .agents/skills/*
+├── AGENTS.md          ← framework + project rules (อำนาจสูงสุด)
+└── .chief/
+    ├── project.md     ← tech stack, dev commands (เขียนโดย /chief-init)
+    ├── _rules/        ← standards ที่ใช้ทุก milestone
+    └── milestone-1/   ← งานปัจจุบัน: goals, contracts, tasks
 ```
 
-## วิธีการทำงาน
+`.chief/` ถูกสร้างแบบ lazy — ไม่มีอะไรปรากฏจนกว่าจะต้องการใช้
 
-- `.agents/` คือตำแหน่ง **หลักที่ไม่ผูกกับ coding agent ใด** สำหรับ agent definitions และ skills
-- `.chief/` เก็บ planning, rules, milestones และ project configuration
-- `AGENTS.md` กำหนดกฎของ framework ที่มีอำนาจสูงสุด
-- `CLAUDE.md` คือ symlink ไปยัง `AGENTS.md` (เฉพาะ Claude Code)
-- `.github/agents/` เก็บ symlinks หรือ copies สำหรับ GitHub Copilot
-- ไดเรกทอรีเฉพาะ agent (`.claude/`, `.github/agents/` ฯลฯ) ถูกสร้างผ่าน symlinks หรือ copies ที่ชี้กลับไปยัง `.agents/`
+**ลำดับอำนาจ rules:** `AGENTS.md` > `.chief/_rules/` > `.chief/milestone-N/_goal/` ระดับสูงกว่าชนะเสมอ
 
-## เริ่มต้นใช้งาน
+→ [Rules hierarchy](docs/manual/reference/rules-hierarchy.md)
+→ [โครงสร้างไดเรกทอรี](docs/manual/reference/directory-structure.md)
 
-หลังติดตั้ง ตั้งค่า context โปรเจกต์ใน `.chief/project.md` (ไม่ใช่ `AGENTS.md` — ไฟล์นั้นเก็บกฎของ framework เท่านั้น):
+## รูปแบบการทำงาน
 
-```
-chief-agent: use grill-me to help me fill in project.md
-```
-
-Chief-agent จะสัมภาษณ์คุณเกี่ยวกับ tech stack, architecture และ dev commands แล้วกรอก `.chief/project.md` ให้ หรือจะแก้ไขเองก็ได้
-
-Milestones สามารถเป็นแบบง่าย (`milestone-1`, `milestone-2`) หรืออ้างอิง project tracker (`milestone-JIRA-123`, `milestone-CU-456`)
-
-## Agents ในภาพรวม
-
-| Agent             | เมื่อไหร่ที่ทำงาน                                       | เมื่อไหร่ที่ควรเรียกเอง                                     |
-| ----------------- | ------------------------------------------------------- | ----------------------------------------------------------- |
-| chief-agent       | เริ่มจากตรงนี้ ให้เป้าหมายมัน                             | วางแผน, ดู progress หรือเปลี่ยนทิศทาง                        |
-| review-plan-agent | ไม่บังคับ ไม่ได้เป็นส่วนของ flow อัตโนมัติ                  | เมื่อต้องการตรวจ plan หาข้อขัดแย้ง                            |
-| builder-agent     | Chief มอบหมาย task หลังจาก plan ถูก review แล้ว           | เมื่อ task พร้อมและต้องการเริ่มสร้าง                          |
-| tester-agent      | เฉพาะเมื่อคุณร้องขอเท่านั้น — ไม่ได้เป็นส่วนของ flow อัตโนมัติ | เมื่อต้องการ integration/E2E testing นอกเหนือจาก unit tests   |
-
-## Quick Start — เลือกสไตล์ของคุณ
-
-มีสองวิธีในการทำงาน เลือกแบบที่เหมาะกับสถานการณ์
-
-### Option A: ควบคุมทุกขั้นตอน (review ทุก step)
+### ควบคุมทุกขั้นตอน — review ทุก step
 
 เหมาะสำหรับ: โปรเจกต์ซับซ้อน, domain ที่ไม่คุ้นเคย, ทำงานเป็นทีม
 
 ```
-/chief-plan              # กริล → goals → contracts → TODO → specs (อนุมัติทุกขั้นตอน)
-builder-agent: implement task-1 from milestone-1   # มอบหมาย tasks ทีละตัว
-/chief-retro                 # ทบทวน coverage และเสนอการอัปเดต rules
+/chief-plan        # grill → goals → contracts → TODO → tasks (อนุมัติทุกขั้นตอน)
+builder-agent: implement task-1 from milestone-1
+/chief-retro       # ทบทวนและบันทึกบทเรียนเป็น rules
 ```
 
-คุณควบคุมทุกอย่าง ทุก goal, contract และ task ถูก review ก่อน execution
-
-### Option B: อัตโนมัติ (ให้ AI ขับเคลื่อน)
+### อัตโนมัติ — ให้ AI ขับเคลื่อน
 
 เหมาะสำหรับ: prototyping, goals ที่ชัดเจน, ทำงานคนเดียว
 
 ```
-/chief-autopilot             # อ่าน goals + contracts, สร้าง TODO, รันทุก tasks
-/chief-retro                 # ทบทวนสิ่งที่เกิดขึ้น
-```
-
-ต้องมี goals และ contracts อยู่แล้ว ใช้ `/chief-plan` ก่อนถ้ายังไม่มี หรือเขียนเอง
-
-### ผสมผสานทั้งสองแบบ
-
-ใช้ทั้งสองแบบร่วมกันได้ วางแผนแบบมี review gates แล้วสลับเป็น autopilot สำหรับ execution:
-
-```
-/chief-plan              # วางแผนอย่างรอบคอบพร้อม approval gates
-/chief-autopilot             # execute แผนที่อนุมัติแล้วแบบอัตโนมัติ
-/chief-retro                 # ทบทวนและเรียนรู้
-```
-
-## Prompts ที่ใช้บ่อย
-
-| สิ่งที่ต้องการ                              | สิ่งที่ต้องพิมพ์                                            |
-| ------------------------------------------ | --------------------------------------------------------- |
-| วางแผน milestone ทีละขั้น                    | `/chief-plan`                                         |
-| รัน milestone แบบ autopilot                  | `/chief-autopilot`                                        |
-| รัน milestone แบบ autopilot (safe mode)      | `/chief-autopilot safe`                                   |
-| รัน retrospective                           | `/chief-retro`                                            |
-| Quick commit ทุกไฟล์                         | `/dump-commit`                                            |
-| Quick commit พร้อมข้อความ                    | `/dump-commit fix auth flow`                              |
-| กริลแผนหรือ design                           | `/grill-me`                                               |
-| เริ่มสร้าง task แบบ manual                    | `builder-agent: implement task-1 from milestone-1`        |
-| ตรวจ plan หาข้อขัดแย้ง                        | `review-plan-agent: review milestone-1 plan`              |
-| รัน integration tests (user-triggered)       | `tester-agent: validate milestone-1`                      |
-| ตั้งค่า project config                        | `chief-agent: use grill-me to help me fill in project.md` |
-
-## ตัวอย่างเพิ่มเติม
-
-**TypeScript SDK สำหรับ payment API**
-
-```
-/chief-plan
-```
-
-Skill จะกริลคุณเรื่องการตัดสินใจ (เช่น "fetch หรือ axios?", "class-based หรือ functional?") เขียน goals และ contracts แล้วแบ่งงานเป็น tasks เมื่อพร้อม:
-
-```
-/chief-autopilot
-```
-
-Chief-agent รันทุก tasks อัตโนมัติ เมื่อเสร็จ:
-
-```
+/chief-autopilot   # อ่าน goals + contracts แล้วรันทุก tasks
 /chief-retro
 ```
 
-ทบทวนสิ่งที่ทำได้เทียบกับแผน และอัปเดต rules สำหรับครั้งถัดไป
-
-**Prototyping แบบเร็ว**
+### ผสมผสานทั้งสองแบบ
 
 ```
-/chief-autopilot
+/chief-plan        # วางแผนพร้อม approval gates
+/chief-autopilot   # execute แผนที่อนุมัติแล้วแบบอัตโนมัติ
+/chief-retro
 ```
 
-ข้ามการวางแผนละเอียด — ให้ chief สร้าง TODO และมอบหมายให้ builder ทันที เมื่อทำเสร็จวันนั้น:
+## Skills
 
-```
-/dump-commit wip: payment SDK progress
-```
+| Skill                | ทำอะไร                                                                                    |
+| -------------------- | ----------------------------------------------------------------------------------------------- |
+| `/chief-init`      | ตั้งค่า `.chief/project.md` ผ่านการสัมภาษณ์                             |
+| `/chief-plan`      | วางแผน milestone: grill → goals → contracts → tasks                                    |
+| `/chief-autopilot` | รัน milestone แบบอัตโนมัติ                                                       |
+| `/chief-grill`     | Stress-test แบบ stateful เชิงลึก; spawn `answer-verifier-agent` ต่อ 1 คำถาม |
+| `/chief-rule`      | บันทึกการตัดสินใจเป็น rule ถาวรใน `_rules/`                        |
+| `/chief-retro`     | Retrospective + lesson learned + อัปเดต `_rules/`                                       |
+| `/grill-design`    | Stress-test design แบบ stateless พร้อม self-critique                                    |
+| `/shape-up`        | แปลงไอเดียฟุ้งเป็น spec ที่มีขอบเขต (top-down)                     |
+| `/slim-down`       | ตัด scope ที่ใหญ่เกินไปให้พอดีกับ 1 phase                             |
+| `/dump-commit`     | Commit เร็วพร้อมข้อความ auto-generated                                          |
+
+→ [Skills reference เต็ม](docs/manual/reference/skills.md)
+→ [วิธีเลือก skill ที่เหมาะกับสถานการณ์](docs/manual/how-to/pick-the-right-skill.md)
+
+## Agents
+
+| Agent                     | บทบาท                                                                           |
+| ------------------------- | ------------------------------------------------------------------------------------ |
+| `chief-agent`           | วางแผน, ประสานงาน, มอบหมาย — ไม่เขียนโค้ด         |
+| `builder-agent`         | implement tasks, รัน unit tests, commit                                           |
+| `tester-agent`          | Integration/E2E validation — เฉพาะเมื่อคุณร้องขอเท่านั้น |
+| `answer-verifier-agent` | Background verifier ที่ถูก spawn โดย `/chief-grill`                       |
+
+→ [Subagents reference](docs/manual/reference/agents.md)
 
 ## การอัปเกรด
 
-ติดตั้ง upgrade skill:
-
 ```bash
-npx skills@latest add thaitype/chief --skill chief-upgrade
-```
+# 1. รีเฟรช skills
+npx skills@latest add thaitype/chief
 
-จากนั้นรัน:
-
-```
+# 2. อัปเกรด framework files
 /chief-upgrade
 ```
 
-ถ้าไม่ระบุ argument จะอัปเกรดเป็นเวอร์ชัน stable ล่าสุด หรือระบุเวอร์ชัน:
+ระบุ version: `npx skills@latest add thaitype/chief#v4.0.0` / `/chief-upgrade v4.0.0`
 
-```
-/chief-upgrade canary
-/chief-upgrade v3.0.0
-```
+→ [วิธีอัปเกรด](docs/manual/how-to/upgrade.md)
 
-Skill จะเปรียบเทียบไฟล์ปัจจุบันกับเวอร์ชันเป้าหมาย สร้าง upgrade plan และรอการอนุมัติจากคุณก่อนทำการเปลี่ยนแปลง
+## เอกสาร
 
-### มาจาก v2
+เอกสารทั้งหมดอยู่ที่ [`docs/manual/`](docs/manual/):
 
-Skills ถูกเปลี่ยนชื่อใน v3:
-- `/install-chief` → `/chief-install`
-- `/upgrade-chief` → `/chief-upgrade`
+| หมวด                                               | เนื้อหา                                                        |
+| ------------------------------------------------------ | --------------------------------------------------------------------- |
+| [Tutorial](docs/manual/tutorials/your-first-milestone.md) | milestone แรกของคุณตั้งแต่ต้นจนจบ              |
+| [How-to guides](docs/manual/how-to/)                      | ติดตั้ง, อัปเกรด, เลือก skill, เขียน rules    |
+| [Reference](docs/manual/reference/)                       | Skills, agents, โครงสร้างไดเรกทอรี, rules hierarchy |
+| [Explanation](docs/manual/explanation/)                   | ทำไมถึงมี Chief, pre-coding first, three-agent model         |
 
-หากคุณมี skills เก่าติดตั้งอยู่ ให้ลบและติดตั้งใหม่:
-```bash
-npx skills@latest add thaitype/chief --skill chief-upgrade
-```
+## Compatibility
 
-### มาจาก v1
+| Coding agent                                          | Integration                                                             |
+| ----------------------------------------------------- | ----------------------------------------------------------------------- |
+| Claude Code                                           | `CLAUDE.md → AGENTS.md` symlink + `.claude/` symlinks              |
+| GitHub Copilot                                        | `.github/agents/` symlinks หรือ copies                            |
+| Cursor, Windsurf, Kiro, Codex, Aider, Amp, Gemini CLI | อ่าน `AGENTS.md` โดยตรง (ยังไม่ได้ทดสอบ ⚠️) |
 
-ดู[เอกสาร v1](https://github.com/thaitype/chief-agent-framework/tree/release/v1)สำหรับรายละเอียดการย้าย
+## Releases
 
-## Release
-
-- v1 — เวอร์ชันแรก เน้นรองรับ Claude Code ดู[เอกสาร](https://github.com/thaitype/chief-agent-framework/tree/release/v1)
-- v2 — รองรับ multi-agent เพิ่มระบบ skills ดู[เอกสาร](https://github.com/thaitype/chief-agent-framework/tree/release/v2)
-- v3 — เปลี่ยนชื่อเป็น Chief เป็นส่วนหนึ่งของระบบนิเวศ [chief-tribe](https://github.com/thaitype/chief-tribe) เปลี่ยนชื่อ skills เป็น `chief-` prefix (`chief-install`, `chief-upgrade`) ย้าย repo ไป [`thaitype/chief`](https://github.com/thaitype/chief)
+- **v1** — เวอร์ชันแรก รองรับ Claude Code [เอกสาร](https://github.com/thaitype/chief-agent-framework/tree/release/v1)
+- **v2** — รองรับ multi-agent เพิ่มระบบ skills [เอกสาร](https://github.com/thaitype/chief-agent-framework/tree/release/v2)
+- **v3** — เปลี่ยนชื่อเป็น Chief เปลี่ยน skill prefix เป็น `chief-` ย้าย repo ไป [`thaitype/chief`](https://github.com/thaitype/chief)
+- **v4** — ติดตั้ง skills ผ่าน `npx skills` (แยกออกจาก install) `.chief/` แบบ lazy Skills ใหม่: `/chief-init`, `/chief-rule`, `/chief-grill`, `/grill-design`, `/shape-up`, `/slim-down` `answer-verifier-agent` แทนที่ `review-plan-agent` ที่ deprecated แล้ว
 
 ## Branches
-- `release/v1` — Stable v1 release
-- `release/v2` — Stable v2 release
-- `main` - latest stable release (ปัจจุบันคือ v3)
-- `canary` - active development branch อาจไม่เสถียร
+
+- `release/v1`, `release/v2` — Stable legacy releases
+- `main` — Stable ล่าสุด (v4)
+- `canary` — Active development อาจไม่เสถียร
 
 ## การพัฒนา
 
-ทดสอบการเปลี่ยนแปลง locally ก่อน submit PR:
-
-1. Push feature branch ไป GitHub
-2. ใน **โปรเจกต์ทดสอบแยกต่างหาก** (ไม่ใช่ใน repo นี้) ติดตั้ง skill จาก branch ของคุณ:
+ทดสอบการเปลี่ยนแปลง locally:
 
 ```bash
+# ติดตั้งจาก branch ของคุณในโปรเจกต์ทดสอบแยกต่างหาก
 npx skills@latest add thaitype/chief#<your-branch> --skill chief-install
-```
 
-3. ทดสอบ:
-
-```
+# จากนั้นทดสอบ:
 /chief-install <your-branch>
 ```
 
-Pattern เดียวกันใช้ได้กับ skills อื่น เช่น `chief-upgrade`
-
 ## การ Contribute
 
-1. Fork repo และแตก branch จาก `canary`
+1. Fork และแตก branch จาก `canary`
 2. ทำการเปลี่ยนแปลง
-3. ทดสอบ locally ตาม workflow [การพัฒนา](#การพัฒนา)ด้านบน
-4. Push และเปิด PR ไปที่ `canary`
-5. ใช้ commit style ที่มีอยู่: `type: description` (เช่น `fix: resolve merge issue`, `feat: add kiro agent support`)
+3. ทดสอบด้วย workflow การพัฒนาด้านบน
+4. PR ไปที่ `canary`
+5. Commit style: `type: description` (เช่น `feat: add kiro support`)
 
-## Acknowledgement
+## Acknowledgements
 
-- Grill me Skill จาก [mattpocock](https://github.com/mattpocock/skills/blob/main/grill-me/SKILL.md)
+- `/grill-design` และ `/chief-grill` ได้แนวคิดจาก [grill-me skill ของ mattpocock](https://github.com/mattpocock/skills/blob/main/grill-me/SKILL.md)
 - Multi-agent architecture ได้แรงบันดาลใจจาก [vercel-labs/skills](https://github.com/vercel-labs/skills)

@@ -1,0 +1,30 @@
+{
+  "name": "chief",
+  "owner": {
+    "name": "thaitype",
+    "url": "https://github.com/thaitype"
+  },
+  "metadata": {
+    "pluginRoot": "./"
+  },
+  "plugins": [
+    {
+      "name": "chief-skills",
+      "source": "./",
+      "skills": [
+        "./skills/setup/chief-install",
+        "./skills/setup/chief-upgrade",
+        "./skills/chief/chief-init",
+        "./skills/chief/chief-autopilot",
+        "./skills/chief/chief-plan",
+        "./skills/chief/chief-retro",
+        "./skills/chief/chief-rule",
+        "./skills/chief/chief-grill",
+        "./skills/engineering/shape-up",
+        "./skills/engineering/grill-design",
+        "./skills/engineering/slim-down",
+        "./skills/misc/dump-commit"
+      ]
+    }
+  ]
+}
