@@ -4,279 +4,194 @@
 
 **English** | **[ไทย](README.th.md)**
 
-A structured workflow for AI coding agents. Drop it into any project, set your rules once, and stop re-explaining your codebase every chat. Used daily across [thaitype](https://github.com/thaitype) projects since Chief was first built.
-
-Built for developers already using AI coding agents who want a structured workflow instead of ad-hoc prompting. Learn more about the [design philosophy](docs/philosophy.md).
+A structured workflow for AI coding agents. Drop it into any project, set your rules once, and stop re-explaining your codebase every chat.
 
 > Chief is part of the [chief-tribe](https://github.com/thaitype/chief-tribe) ecosystem. It uses [sage](https://github.com/thaitype/sage) as its behavioral baseline.
 
 ## Why Chief exists
 
-Every project has its own context — the patterns, the decisions you made six months ago, the weird workaround for that one bug, all the "why we do it this way" stuff. It lives in your head, in scattered docs, in a Notion page nobody updates. So every time you start a fresh chat with an AI agent, you re-explain. Then you do it again next chat. By the end of the day your brain is fried, and not even from the actual work — just from being a human context proxy.
+Every project has context — the decisions from six months ago, the weird workaround, all the "why we do it this way" stuff. It lives in your head. Every new AI chat starts blank, so you re-explain. Then again next chat.
 
-Chief stops that. The idea is dumb-simple: give every project the same shape, in markdown, in places that don't move. `AGENTS.md` holds the rules. `.chief/_rules/` holds the shared standards. `.chief/milestone-N/` holds whatever you're building this week.
+Chief stops that. Give every project the same shape — `AGENTS.md` for rules, `.chief/_rules/` for standards, `.chief/milestone-N/` for current work. Agents know where to read and write. Your prompts shrink to one sentence.
 
-Once the layout is fixed, subagents and skills already know where to read and where to write. Nobody has to tell them. Which means your prompts can be one sentence. "Plan milestone 3." "Build task 2." "What changed?" The agents figure out the rest because everything they need is exactly where they expect it.
+→ [Why Chief exists](docs/manual/explanation/why-chief.md)
 
-You stop repeating yourself, you stop burning brain cycles deciding where to put things, and you actually ship.
+## Quickstart
 
-## Quickstart (30-second setup)
-
-Install Chief skills:
+**Step 1 — Install skills:**
 
 ```bash
 npx skills@latest add thaitype/chief
 ```
 
-Pick the skills you want, and which coding agents you want to install them on. Make sure you select `chief-install`.
+Select the skills you want (press `a` for all). Make sure `chief-install` is included.
 
-Run `/chief-install` in your agent. It will:
+**Step 2 — Run `/chief-install` in your agent:**
 
-* Ask which coding agent you use (Claude Code, Copilot, Cursor, etc.)
-* Pick the install mode (symlink or copy)
-* Ask whether you want to install the subagents
-* Install `AGENTS.md` (and the subagents, if you opted in) into your project
+```
+/chief-install
+```
 
-That's it — you're ready to go.
+It asks which coding agent you use, whether to symlink or copy, and whether to include subagents. That's it.
 
-**Optional:** Run `/chief-init` to bootstrap project context. It interviews you about your tech stack, architecture, and dev commands, then writes the answers to `.chief/project.md`. You can also write it by hand later, or skip it entirely if you don't need project-level rules yet.
+**Step 3 — Bootstrap project context (optional):**
 
-For manual installation options (shell script, git clone), see [docs/manual-install.md](docs/manual-install.md).
+```
+/chief-init
+```
 
-> **Windows users:** Link mode requires Developer Mode enabled and `git config --global core.symlinks true`. The setup script auto-detects this — if symlinks aren't available, it falls back to copy mode.
+Interviews you about your stack and dev commands, writes `.chief/project.md`. Skip it and write the file by hand later if you prefer.
 
-> Current version is v4. If you're coming from an older version, follow the [upgrade instructions](#upgrading).
+→ [Full tutorial: your first milestone](docs/manual/tutorials/your-first-milestone.md)  
+→ [Manual install options](docs/manual/how-to/install.md)
 
-## Compatibility
+> **Windows users:** Symlink mode requires Developer Mode and `git config --global core.symlinks true`. The install skill auto-detects and falls back to copy mode.
 
-Chief has three main parts: `AGENTS.md`, subagents (or custom agents), and skills.
+## How Chief works
 
-* **`AGENTS.md`** — Most AI coding agents read `AGENTS.md` out of the box as user-defined rules. For Claude Code and GitHub Copilot, which use their own filenames, `/chief-install` sets up the symlinks automatically.
-* **Skills** — Compatible with most major agents through the [vercel skills](https://github.com/vercel-labs/skills) ecosystem, the de facto open standard for installing skills.
-* **Subagents** — Skills alone are enough for most cases. Pair them with `AGENTS.md` and subagents (or custom agents), and Chief becomes much more effective.
-
-Learn more in the [compatibility guide](docs/compatibility.md).
-
-## How Chief Works
-
-### Structure
-
-Chief is markdown files in three places. That's it.
-
-* **`AGENTS.md`** — your framework and project rules. Top of the chain; when something contradicts, this wins.
-* **`.chief/_rules/`** — the rules that apply across every milestone (standards, contracts, goals, verification).
-* **`.chief/milestone-N/`** — wherever you're working right now.
+Chief is markdown files in three places:
 
 ```
 project/
-├── AGENTS.md
+├── AGENTS.md          ← framework + project rules (highest authority)
 └── .chief/
-    ├── project.md
-    ├── _rules/
-    └── milestone-1/
+    ├── project.md     ← tech stack, dev commands (written by /chief-init)
+    ├── _rules/        ← standards that apply across all milestones
+    └── milestone-1/   ← current work: goals, contracts, tasks
 ```
 
-### Rules hierarchy
+`.chief/` is created lazily — nothing appears until you need it.
 
-When rules disagree, higher up the tree wins:
+**Rules hierarchy:** `AGENTS.md` > `.chief/_rules/` > `.chief/milestone-N/_goal/`. Higher always wins.
 
-1. `AGENTS.md` — the law
-2. `.chief/_rules/` — house rules
-3. `.chief/milestone-N/_goal/` — what this milestone cares about
+→ [Rules hierarchy](docs/manual/reference/rules-hierarchy.md)  
+→ [Directory structure](docs/manual/reference/directory-structure.md)
 
-### Per-milestone lifecycle
+## Working styles
 
-A milestone moves through five stages. You'll skip some depending on what you're building:
+### Controlled — review every step
 
-1. **Clarify** — if the goal is fuzzy or the stakes are high, run `/chief-grill` first. It pushes back on your assumptions using the actual codebase, so you don't end up planning on top of things that aren't true.
-2. **Plan** — `/chief-plan` walks you through goals → contracts → TODO → tasks, with a review gate at each step.
-3. **Build** — chief-agent hands tasks to `builder-agent` one at a time. Or skip the hand-holding and let `/chief-autopilot` rip through the list.
-4. **Verify** — call `tester-agent` when unit tests aren't enough and you need integration or E2E coverage.
-5. **Reflect** — `/chief-retro` compares what shipped to what was planned and proposes rule updates, so the same mistakes don't keep showing up next time.
-
-### Agents
-
-| Agent                 | When it works                                                             | When to call manually                                       |
-| --------------------- | ------------------------------------------------------------------------- | ----------------------------------------------------------- |
-| chief-agent           | You start here. Give it a goal.                                           | Plan work, review progress, or change direction             |
-| builder-agent         | Chief delegates tasks to it after plan is reviewed                        | When a task is ready and you want to start building         |
-| tester-agent          | Only when you request it — not part of the automatic flow                | When you need integration/E2E testing beyond unit tests     |
-| answer-verifier-agent | Spawned by `/chief-grill` per question (background) and at end-of-grill | When you want a codebase-grounded second opinion on a claim |
-
-## Working Styles — Pick Yours
-
-There are two ways to work. Pick the one that fits your situation.
-
-> **High-stakes or ambiguous goal?** Run `/chief-grill` first to clarify before planning. The grill outcome feeds straight into `/chief-plan` (or skip into `/chief-autopilot` if the answer is clear). Skip the grill when the goal is already concrete.
-
-### Option A: Controlled (review every step)
-
-Best for: complex projects, unfamiliar domains, team work.
+Best for complex projects, unfamiliar domains, team work.
 
 ```
-/chief-plan                                       # grill → goals → contracts → TODO → specs (approval at each step)
-builder-agent: implement task-1 from milestone-1  # delegate tasks one by one
-/chief-retro                                      # review coverage and propose rule updates
+/chief-plan        # grill → goals → contracts → TODO → tasks (approval at each step)
+builder-agent: implement task-1 from milestone-1
+/chief-retro       # review and capture lessons as rules
 ```
 
-You stay in control. Every goal, contract, and task is reviewed before execution.
+### Autonomous — let AI drive
 
-### Option B: Autonomous (let AI drive)
-
-Best for: prototyping, well-defined goals, solo work.
+Best for prototyping, well-defined goals, solo work.
 
 ```
-/chief-autopilot  # reads goals + contracts, creates TODO, runs all tasks
-/chief-retro      # review what happened
-```
-
-Requires goals and contracts to exist. Use `/chief-plan` first if they don't, or write them yourself.
-
-### Mix and Match
-
-You can combine both. Plan with review gates, then switch to autopilot for execution:
-
-```
-/chief-plan       # plan carefully with approval gates
-/chief-autopilot  # execute the approved plan autonomously
-/chief-retro      # review and learn
-```
-
-## Examples
-
-### Common prompts
-
-| What you want                          | What to type                                         |
-| -------------------------------------- | ---------------------------------------------------- |
-| Plan a milestone step-by-step          | `/chief-plan`                                      |
-| Run milestone on autopilot             | `/chief-autopilot`                                 |
-| Run milestone on autopilot (safe mode) | `/chief-autopilot safe`                            |
-| Run a retrospective                    | `/chief-retro`                                     |
-| Quick commit all changes               | `/dump-commit`                                     |
-| Quick commit with message              | `/dump-commit fix auth flow`                       |
-| Stress-test a design or decision tree  | `/grill-design`                                    |
-| Deep grill or validate a plan          | `/chief-grill`                                     |
-| Start building a task manually         | `builder-agent: implement task-1 from milestone-1` |
-| Run integration tests (user-triggered) | `tester-agent: validate milestone-1`               |
-| Set up project config                  | `/chief-init`                                      |
-| Add a rule to .chief/_rules/           | `/chief-rule`                                      |
-
-### Walkthroughs
-
-**TypeScript SDK for a payment API**
-
-```
-/chief-plan
-```
-
-The skill grills you on decisions (e.g. "fetch or axios?", "class-based or functional?"), writes goals and contracts, then breaks the work into tasks. When ready:
-
-```
-/chief-autopilot
-```
-
-Chief-agent runs through all tasks autonomously. When done:
-
-```
+/chief-autopilot   # reads goals + contracts, runs all tasks
 /chief-retro
 ```
 
-Review what was delivered vs planned, and update rules for next time.
-
-**Quick prototyping session**
+### Mix and match
 
 ```
-/chief-autopilot
+/chief-plan        # plan with approval gates
+/chief-autopilot   # execute the approved plan
+/chief-retro
 ```
 
-Skip detailed planning — let chief create TODO and delegate to builder on the fly. When you're done for the day:
+## Skills
 
-```
-/dump-commit wip: payment SDK progress
-```
+| Skill | What it does |
+|---|---|
+| `/chief-init` | Bootstrap `.chief/project.md` via interview |
+| `/chief-plan` | Plan a milestone: grill → goals → contracts → tasks |
+| `/chief-autopilot` | Run a milestone autonomously |
+| `/chief-grill` | Deep stateful stress-test; spawns `answer-verifier-agent` per question |
+| `/chief-rule` | Capture a decision as a permanent rule in `_rules/` |
+| `/chief-retro` | Retrospective + lesson learned + `_rules/` update |
+| `/grill-design` | Stateless design stress-test with self-critique |
+| `/shape-up` | Turn a fuzzy idea into a scoped spec (top-down) |
+| `/slim-down` | Cut a scope that's too large into a phase-sized piece |
+| `/dump-commit` | Quick clean commit with auto-generated message |
 
-**High-stakes decision (e.g. picking a database, redesigning auth)**
+→ [Full skills reference](docs/manual/reference/skills.md)  
+→ [How to pick the right skill](docs/manual/how-to/pick-the-right-skill.md)
 
-```
-/chief-grill
-```
+## Agents
 
-Walks the decision tree one question at a time, recommends an answer with self-critique, and verifies each answer against your actual repo via the `answer-verifier-agent` in the background. The session is logged to `.chief/_grill/opened/NNNN-topic.md` so it survives context resets. Capture any rules that come out of the discussion with `/chief-rule`.
+| Agent | Role |
+|---|---|
+| `chief-agent` | Plans, orchestrates, delegates — does not write code |
+| `builder-agent` | Implements tasks, runs unit tests, commits |
+| `tester-agent` | Integration/E2E validation — only when you request it |
+| `answer-verifier-agent` | Background verifier spawned by `/chief-grill` |
 
----
+→ [Subagents reference](docs/manual/reference/agents.md)
 
 ## Upgrading
 
 ```bash
-# 1. Refresh Chief skills
+# 1. Refresh skills
 npx skills@latest add thaitype/chief
-```
 
-```
 # 2. Upgrade framework files
 /chief-upgrade
 ```
 
-**What each step does:**
+To pin a version: `npx skills@latest add thaitype/chief#v4.0.0` / `/chief-upgrade v4.0.0`
 
-* **Step 1** pulls the latest version of every Chief skill. The picker shows what changed. Safe to re-run anytime — `npx skills add` is idempotent.
-* **Step 2** runs `chief-upgrade`. It diffs your framework files against the target version, builds an upgrade plan, and waits for your sign-off before changing anything.
+→ [How to upgrade](docs/manual/how-to/upgrade.md)
 
-By default, both commands target the latest stable release. To pin a specific version:
+## Documentation
 
-```bash
-# Skills (any git ref — tag, branch, or commit)
-npx skills@latest add thaitype/chief#<git-ref>
-```
+Full documentation lives in [`docs/manual/`](docs/manual/):
 
-```
-# Framework files
-/chief-upgrade canary
-/chief-upgrade v4.0.0
-```
+| Section | Content |
+|---|---|
+| [Tutorial](docs/manual/tutorials/your-first-milestone.md) | Your first milestone, end to end |
+| [How-to guides](docs/manual/how-to/) | Install, upgrade, pick a skill, write rules |
+| [Reference](docs/manual/reference/) | Skills, agents, directory structure, rules hierarchy |
+| [Explanation](docs/manual/explanation/) | Why Chief exists, pre-coding first, three-agent model |
+
+## Compatibility
+
+| Coding agent | Integration |
+|---|---|
+| Claude Code | `CLAUDE.md → AGENTS.md` symlink + `.claude/` symlinks |
+| GitHub Copilot | `.github/agents/` symlinks or copies |
+| Cursor, Windsurf, Kiro, Codex, Aider, Amp, Gemini CLI | Reads `AGENTS.md` natively (untested ⚠️) |
 
 ## Releases
 
-- v1 — Initial release, focused on Claude Code support. See [docs](https://github.com/thaitype/chief-agent-framework/tree/release/v1).
-- v2 — Multi-agent support, added skills system. See [docs](https://github.com/thaitype/chief-agent-framework/tree/release/v2).
-- v3 — Renamed to Chief as part of the [chief-tribe](https://github.com/thaitype/chief-tribe) ecosystem. Skills renamed to `chief-` prefix (`chief-install`, `chief-upgrade`). Repo moved to [`thaitype/chief`](https://github.com/thaitype/chief).
-- v4 — Skills managed via `npx skills@latest add thaitype/chief` (decoupled from framework install). Lazy `.chief/`: install ships only subagents and `AGENTS.md`; `.chief/` is created on demand by `/chief-init` and chief-agent. New skills: `/chief-init`, `/chief-rule`, `/chief-grill`, `/grill-design`. `review-plan-agent` deprecated in favor of `answer-verifier-agent`.
+- **v1** — Initial release, Claude Code support. [docs](https://github.com/thaitype/chief-agent-framework/tree/release/v1)
+- **v2** — Multi-agent support, skills system. [docs](https://github.com/thaitype/chief-agent-framework/tree/release/v2)
+- **v3** — Rebranded to Chief. `chief-` skill prefix. Repo moved to [`thaitype/chief`](https://github.com/thaitype/chief).
+- **v4** — Skills via `npx skills` (decoupled from install). Lazy `.chief/`. New skills: `/chief-init`, `/chief-rule`, `/chief-grill`, `/grill-design`, `/shape-up`, `/slim-down`. `answer-verifier-agent` replaces deprecated `review-plan-agent`.
 
 ## Branches
 
-- `release/v1` — Stable v1 release
-- `release/v2` — Stable v2 release
-- `main` - latest stable release (currently v4)
-- `canary` - active development branch, may be unstable
+- `release/v1`, `release/v2` — Stable legacy releases
+- `main` — Latest stable (v4)
+- `canary` — Active development, may be unstable
 
 ## Development
 
-To test changes locally before submitting a PR:
-
-1. Push your feature branch to GitHub
-2. In a **separate test project** (not inside this repo), install the skill from your branch:
+To test changes locally:
 
 ```bash
+# Install from your branch in a separate test project
 npx skills@latest add thaitype/chief#<your-branch> --skill chief-install
-```
 
-3. Test it:
-
-```
+# Then test:
 /chief-install <your-branch>
 ```
 
-The same pattern works for other skills like `chief-upgrade`. To pull the entire bundle from a branch instead of a single skill, drop the `--skill` flag: `npx skills@latest add thaitype/chief#<your-branch>`.
-
 ## Contributing
 
-1. Fork the repo and branch from `canary`
-2. Make your changes
-3. Test locally using the [Development](#development) workflow above
-4. Push and open a PR targeting `canary`
-5. Follow existing commit style: `type: description` (e.g. `fix: resolve merge issue`, `feat: add kiro agent support`)
+1. Fork and branch from `canary`
+2. Make changes
+3. Test with the development workflow above
+4. PR targeting `canary`
+5. Commit style: `type: description` (e.g. `feat: add kiro support`)
 
 ## Acknowledgements
 
-- The grill-me concept (now `/grill-design` and `/chief-grill`) originated from [mattpocock&#39;s grill-me skill](https://github.com/mattpocock/skills/blob/main/grill-me/SKILL.md)
+- `/grill-design` and `/chief-grill` originated from [mattpocock's grill-me skill](https://github.com/mattpocock/skills/blob/main/grill-me/SKILL.md)
 - Multi-agent architecture inspired by [vercel-labs/skills](https://github.com/vercel-labs/skills)
