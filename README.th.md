@@ -24,7 +24,7 @@ Chief หยุดสิ่งนั้น ให้ทุกโปรเจก�
 npx skills@latest add thaitype/chief
 ```
 
-เลือก skills ที่ต้องการ (กด `a` เพื่อเลือกทั้งหมด) ต้องมี `chief-install` รวมอยู่ด้วย
+เลือก skills ที่ต้องการ ต้องมี `chief-install` รวมอยู่ด้วย
 
 **ขั้นที่ 2 — รัน `/chief-install` ใน agent ของคุณ:**
 
@@ -42,8 +42,7 @@ npx skills@latest add thaitype/chief
 
 สัมภาษณ์เรื่อง stack และ dev commands แล้วเขียนไปที่ `.chief/project.md` จะข้ามและเขียนไฟล์เองทีหลังก็ได้
 
-→ [Tutorial เต็ม: milestone แรกของคุณ](docs/manual/tutorials/your-first-milestone.md)  
-→ [ตัวเลือกการติดตั้งแบบ manual](docs/manual/how-to/install.md)
+→ [Tutorial เต็ม: milestone แรกของคุณ](docs/manual/tutorials/your-first-milestone.md)→ [ตัวเลือกการติดตั้งแบบ manual](docs/manual/how-to/install.md)
 
 > **ผู้ใช้ Windows:** Symlink mode ต้องเปิด Developer Mode และตั้ง `git config --global core.symlinks true` install skill จะตรวจจับอัตโนมัติและ fallback เป็น copy mode
 
@@ -64,7 +63,7 @@ project/
 
 **ลำดับอำนาจ rules:** `AGENTS.md` > `.chief/_rules/` > `.chief/milestone-N/_goal/` ระดับสูงกว่าชนะเสมอ
 
-→ [Rules hierarchy](docs/manual/reference/rules-hierarchy.md)  
+→ [Rules hierarchy](docs/manual/reference/rules-hierarchy.md)
 → [โครงสร้างไดเรกทอรี](docs/manual/reference/directory-structure.md)
 
 ## รูปแบบการทำงาน
@@ -98,30 +97,30 @@ builder-agent: implement task-1 from milestone-1
 
 ## Skills
 
-| Skill | ทำอะไร |
-|---|---|
-| `/chief-init` | ตั้งค่า `.chief/project.md` ผ่านการสัมภาษณ์ |
-| `/chief-plan` | วางแผน milestone: grill → goals → contracts → tasks |
-| `/chief-autopilot` | รัน milestone แบบอัตโนมัติ |
-| `/chief-grill` | Stress-test แบบ stateful เชิงลึก; spawn `answer-verifier-agent` ต่อ 1 คำถาม |
-| `/chief-rule` | บันทึกการตัดสินใจเป็น rule ถาวรใน `_rules/` |
-| `/chief-retro` | Retrospective + lesson learned + อัปเดต `_rules/` |
-| `/grill-design` | Stress-test design แบบ stateless พร้อม self-critique |
-| `/shape-up` | แปลงไอเดียฟุ้งเป็น spec ที่มีขอบเขต (top-down) |
-| `/slim-down` | ตัด scope ที่ใหญ่เกินไปให้พอดีกับ 1 phase |
-| `/dump-commit` | Commit เร็วพร้อมข้อความ auto-generated |
+| Skill                | ทำอะไร                                                                                    |
+| -------------------- | ----------------------------------------------------------------------------------------------- |
+| `/chief-init`      | ตั้งค่า `.chief/project.md` ผ่านการสัมภาษณ์                             |
+| `/chief-plan`      | วางแผน milestone: grill → goals → contracts → tasks                                    |
+| `/chief-autopilot` | รัน milestone แบบอัตโนมัติ                                                       |
+| `/chief-grill`     | Stress-test แบบ stateful เชิงลึก; spawn `answer-verifier-agent` ต่อ 1 คำถาม |
+| `/chief-rule`      | บันทึกการตัดสินใจเป็น rule ถาวรใน `_rules/`                        |
+| `/chief-retro`     | Retrospective + lesson learned + อัปเดต `_rules/`                                       |
+| `/grill-design`    | Stress-test design แบบ stateless พร้อม self-critique                                    |
+| `/shape-up`        | แปลงไอเดียฟุ้งเป็น spec ที่มีขอบเขต (top-down)                     |
+| `/slim-down`       | ตัด scope ที่ใหญ่เกินไปให้พอดีกับ 1 phase                             |
+| `/dump-commit`     | Commit เร็วพร้อมข้อความ auto-generated                                          |
 
-→ [Skills reference เต็ม](docs/manual/reference/skills.md)  
+→ [Skills reference เต็ม](docs/manual/reference/skills.md)
 → [วิธีเลือก skill ที่เหมาะกับสถานการณ์](docs/manual/how-to/pick-the-right-skill.md)
 
 ## Agents
 
-| Agent | บทบาท |
-|---|---|
-| `chief-agent` | วางแผน, ประสานงาน, มอบหมาย — ไม่เขียนโค้ด |
-| `builder-agent` | implement tasks, รัน unit tests, commit |
-| `tester-agent` | Integration/E2E validation — เฉพาะเมื่อคุณร้องขอเท่านั้น |
-| `answer-verifier-agent` | Background verifier ที่ถูก spawn โดย `/chief-grill` |
+| Agent                     | บทบาท                                                                           |
+| ------------------------- | ------------------------------------------------------------------------------------ |
+| `chief-agent`           | วางแผน, ประสานงาน, มอบหมาย — ไม่เขียนโค้ด         |
+| `builder-agent`         | implement tasks, รัน unit tests, commit                                           |
+| `tester-agent`          | Integration/E2E validation — เฉพาะเมื่อคุณร้องขอเท่านั้น |
+| `answer-verifier-agent` | Background verifier ที่ถูก spawn โดย `/chief-grill`                       |
 
 → [Subagents reference](docs/manual/reference/agents.md)
 
@@ -143,19 +142,19 @@ npx skills@latest add thaitype/chief
 
 เอกสารทั้งหมดอยู่ที่ [`docs/manual/`](docs/manual/):
 
-| หมวด | เนื้อหา |
-|---|---|
-| [Tutorial](docs/manual/tutorials/your-first-milestone.md) | milestone แรกของคุณตั้งแต่ต้นจนจบ |
-| [How-to guides](docs/manual/how-to/) | ติดตั้ง, อัปเกรด, เลือก skill, เขียน rules |
-| [Reference](docs/manual/reference/) | Skills, agents, โครงสร้างไดเรกทอรี, rules hierarchy |
-| [Explanation](docs/manual/explanation/) | ทำไมถึงมี Chief, pre-coding first, three-agent model |
+| หมวด                                               | เนื้อหา                                                        |
+| ------------------------------------------------------ | --------------------------------------------------------------------- |
+| [Tutorial](docs/manual/tutorials/your-first-milestone.md) | milestone แรกของคุณตั้งแต่ต้นจนจบ              |
+| [How-to guides](docs/manual/how-to/)                      | ติดตั้ง, อัปเกรด, เลือก skill, เขียน rules    |
+| [Reference](docs/manual/reference/)                       | Skills, agents, โครงสร้างไดเรกทอรี, rules hierarchy |
+| [Explanation](docs/manual/explanation/)                   | ทำไมถึงมี Chief, pre-coding first, three-agent model         |
 
 ## Compatibility
 
-| Coding agent | Integration |
-|---|---|
-| Claude Code | `CLAUDE.md → AGENTS.md` symlink + `.claude/` symlinks |
-| GitHub Copilot | `.github/agents/` symlinks หรือ copies |
+| Coding agent                                          | Integration                                                             |
+| ----------------------------------------------------- | ----------------------------------------------------------------------- |
+| Claude Code                                           | `CLAUDE.md → AGENTS.md` symlink + `.claude/` symlinks              |
+| GitHub Copilot                                        | `.github/agents/` symlinks หรือ copies                            |
 | Cursor, Windsurf, Kiro, Codex, Aider, Amp, Gemini CLI | อ่าน `AGENTS.md` โดยตรง (ยังไม่ได้ทดสอบ ⚠️) |
 
 ## Releases

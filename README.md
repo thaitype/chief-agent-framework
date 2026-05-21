@@ -24,7 +24,7 @@ Chief stops that. Give every project the same shape — `AGENTS.md` for rules, `
 npx skills@latest add thaitype/chief
 ```
 
-Select the skills you want (press `a` for all). Make sure `chief-install` is included.
+Select the skills you want. Make sure `chief-install` is included.
 
 **Step 2 — Run `/chief-install` in your agent:**
 
@@ -42,8 +42,7 @@ It asks which coding agent you use, whether to symlink or copy, and whether to i
 
 Interviews you about your stack and dev commands, writes `.chief/project.md`. Skip it and write the file by hand later if you prefer.
 
-→ [Full tutorial: your first milestone](docs/manual/tutorials/your-first-milestone.md)  
-→ [Manual install options](docs/manual/how-to/install.md)
+→ [Full tutorial: your first milestone](docs/manual/tutorials/your-first-milestone.md)→ [Manual install options](docs/manual/how-to/install.md)
 
 > **Windows users:** Symlink mode requires Developer Mode and `git config --global core.symlinks true`. The install skill auto-detects and falls back to copy mode.
 
@@ -64,7 +63,7 @@ project/
 
 **Rules hierarchy:** `AGENTS.md` > `.chief/_rules/` > `.chief/milestone-N/_goal/`. Higher always wins.
 
-→ [Rules hierarchy](docs/manual/reference/rules-hierarchy.md)  
+→ [Rules hierarchy](docs/manual/reference/rules-hierarchy.md)
 → [Directory structure](docs/manual/reference/directory-structure.md)
 
 ## Working styles
@@ -98,30 +97,30 @@ Best for prototyping, well-defined goals, solo work.
 
 ## Skills
 
-| Skill | What it does |
-|---|---|
-| `/chief-init` | Bootstrap `.chief/project.md` via interview |
-| `/chief-plan` | Plan a milestone: grill → goals → contracts → tasks |
-| `/chief-autopilot` | Run a milestone autonomously |
-| `/chief-grill` | Deep stateful stress-test; spawns `answer-verifier-agent` per question |
-| `/chief-rule` | Capture a decision as a permanent rule in `_rules/` |
-| `/chief-retro` | Retrospective + lesson learned + `_rules/` update |
-| `/grill-design` | Stateless design stress-test with self-critique |
-| `/shape-up` | Turn a fuzzy idea into a scoped spec (top-down) |
-| `/slim-down` | Cut a scope that's too large into a phase-sized piece |
-| `/dump-commit` | Quick clean commit with auto-generated message |
+| Skill                | What it does                                                             |
+| -------------------- | ------------------------------------------------------------------------ |
+| `/chief-init`      | Bootstrap `.chief/project.md` via interview                            |
+| `/chief-plan`      | Plan a milestone: grill → goals → contracts → tasks                   |
+| `/chief-autopilot` | Run a milestone autonomously                                             |
+| `/chief-grill`     | Deep stateful stress-test; spawns `answer-verifier-agent` per question |
+| `/chief-rule`      | Capture a decision as a permanent rule in `_rules/`                    |
+| `/chief-retro`     | Retrospective + lesson learned +`_rules/` update                       |
+| `/grill-design`    | Stateless design stress-test with self-critique                          |
+| `/shape-up`        | Turn a fuzzy idea into a scoped spec (top-down)                          |
+| `/slim-down`       | Cut a scope that's too large into a phase-sized piece                    |
+| `/dump-commit`     | Quick clean commit with auto-generated message                           |
 
-→ [Full skills reference](docs/manual/reference/skills.md)  
+→ [Full skills reference](docs/manual/reference/skills.md)
 → [How to pick the right skill](docs/manual/how-to/pick-the-right-skill.md)
 
 ## Agents
 
-| Agent | Role |
-|---|---|
-| `chief-agent` | Plans, orchestrates, delegates — does not write code |
-| `builder-agent` | Implements tasks, runs unit tests, commits |
-| `tester-agent` | Integration/E2E validation — only when you request it |
-| `answer-verifier-agent` | Background verifier spawned by `/chief-grill` |
+| Agent                     | Role                                                   |
+| ------------------------- | ------------------------------------------------------ |
+| `chief-agent`           | Plans, orchestrates, delegates — does not write code  |
+| `builder-agent`         | Implements tasks, runs unit tests, commits             |
+| `tester-agent`          | Integration/E2E validation — only when you request it |
+| `answer-verifier-agent` | Background verifier spawned by `/chief-grill`        |
 
 → [Subagents reference](docs/manual/reference/agents.md)
 
@@ -143,20 +142,20 @@ To pin a version: `npx skills@latest add thaitype/chief#v4.0.0` / `/chief-upgrad
 
 Full documentation lives in [`docs/manual/`](docs/manual/):
 
-| Section | Content |
-|---|---|
-| [Tutorial](docs/manual/tutorials/your-first-milestone.md) | Your first milestone, end to end |
-| [How-to guides](docs/manual/how-to/) | Install, upgrade, pick a skill, write rules |
-| [Reference](docs/manual/reference/) | Skills, agents, directory structure, rules hierarchy |
-| [Explanation](docs/manual/explanation/) | Why Chief exists, pre-coding first, three-agent model |
+| Section                                                | Content                                               |
+| ------------------------------------------------------ | ----------------------------------------------------- |
+| [Tutorial](docs/manual/tutorials/your-first-milestone.md) | Your first milestone, end to end                      |
+| [How-to guides](docs/manual/how-to/)                      | Install, upgrade, pick a skill, write rules           |
+| [Reference](docs/manual/reference/)                       | Skills, agents, directory structure, rules hierarchy  |
+| [Explanation](docs/manual/explanation/)                   | Why Chief exists, pre-coding first, three-agent model |
 
 ## Compatibility
 
-| Coding agent | Integration |
-|---|---|
-| Claude Code | `CLAUDE.md → AGENTS.md` symlink + `.claude/` symlinks |
-| GitHub Copilot | `.github/agents/` symlinks or copies |
-| Cursor, Windsurf, Kiro, Codex, Aider, Amp, Gemini CLI | Reads `AGENTS.md` natively (untested ⚠️) |
+| Coding agent                                          | Integration                                                |
+| ----------------------------------------------------- | ---------------------------------------------------------- |
+| Claude Code                                           | `CLAUDE.md → AGENTS.md` symlink + `.claude/` symlinks |
+| GitHub Copilot                                        | `.github/agents/` symlinks or copies                     |
+| Cursor, Windsurf, Kiro, Codex, Aider, Amp, Gemini CLI | Reads `AGENTS.md` natively (untested ⚠️)               |
 
 ## Releases
 
@@ -193,5 +192,5 @@ npx skills@latest add thaitype/chief#<your-branch> --skill chief-install
 
 ## Acknowledgements
 
-- `/grill-design` and `/chief-grill` originated from [mattpocock's grill-me skill](https://github.com/mattpocock/skills/blob/main/grill-me/SKILL.md)
+- `/grill-design` and `/chief-grill` originated from [mattpocock&#39;s grill-me skill](https://github.com/mattpocock/skills/blob/main/grill-me/SKILL.md)
 - Multi-agent architecture inspired by [vercel-labs/skills](https://github.com/vercel-labs/skills)
