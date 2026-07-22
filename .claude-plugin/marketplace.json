@@ -20,9 +20,11 @@
         "./skills/chief/chief-retro",
         "./skills/chief/chief-rule",
         "./skills/chief/chief-grill",
+        "./skills/chief/chief-loop",
         "./skills/engineering/shape-up",
         "./skills/engineering/grill-design",
         "./skills/engineering/slim-down",
+        "./skills/engineering/loop-readiness",
         "./skills/misc/dump-commit"
       ]
     }
