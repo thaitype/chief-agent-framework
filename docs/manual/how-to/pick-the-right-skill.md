@@ -38,9 +38,11 @@ You have a problem or vision but haven't turned it into concrete requirements. `
 |---|---|
 | Plan a milestone step by step | `/chief-plan` |
 | Run a milestone hands-off | `/chief-autopilot` |
+| Run a full milestone across many batches, one report per task | `/chief-loop` |
 | Stress-test a design before building | `/chief-grill` or `/grill-design` |
 | Turn a vague idea into a spec | `/shape-up` |
 | Cut a goal down to a manageable phase | `/slim-down` |
+| Check a plan is safe to run unattended | `/loop-readiness` |
 | Permanently capture a decision as a rule | `/chief-rule` |
 | Bootstrap project context once | `/chief-init` |
 | Review a milestone after it ships | `/chief-retro` |
@@ -72,6 +74,14 @@ Use `/grill-design` for smaller ideas where you don't need audit trail or codeba
 | Best for | Complex projects, team work, unfamiliar domains | Prototyping, well-defined goals, solo work |
 
 You can combine: plan carefully with `/chief-plan`, then execute with `/chief-autopilot`.
+
+---
+
+## Choosing between `/chief-autopilot` and `/chief-loop`
+
+`/chief-loop` builds directly on `/chief-autopilot`'s auto mode — same no-stopping-for-ambiguity behavior, but it spans as many batches as it takes to finish the milestone (not just one), and writes a report per task instead of one per batch. Use `/loop-readiness` first if the milestone is large or touches anything you'd want a real-environment check on before letting it run unattended for that long.
+
+If you want the "stop and ask a human on ambiguity" behavior, use `/chief-autopilot safe` instead — `/chief-loop` has no safe-mode equivalent.
 
 ---
 

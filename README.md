@@ -102,12 +102,14 @@ Best for prototyping, well-defined goals, solo work.
 | `/chief-init`      | Bootstrap `.chief/project.md` via interview                            |
 | `/chief-plan`      | Plan a milestone: grill → goals → contracts → tasks                   |
 | `/chief-autopilot` | Run a milestone autonomously                                             |
+| `/chief-loop`      | Run chief-agent across a full milestone, batch after batch, with a report per task |
 | `/chief-grill`     | Deep stateful stress-test; spawns `answer-verifier-agent` per question |
 | `/chief-rule`      | Capture a decision as a permanent rule in `_rules/`                    |
 | `/chief-retro`     | Retrospective + lesson learned +`_rules/` update                       |
 | `/grill-design`    | Stateless design stress-test with self-critique                          |
 | `/shape-up`        | Turn a fuzzy idea into a scoped spec (top-down)                          |
 | `/slim-down`       | Cut a scope that's too large into a phase-sized piece                    |
+| `/loop-readiness`  | Review whether a plan is ready to run as an unattended loop              |
 | `/dump-commit`     | Quick clean commit with auto-generated message                           |
 
 → [Full skills reference](docs/manual/reference/skills.md)
@@ -162,7 +164,7 @@ Full documentation lives in [`docs/manual/`](docs/manual/):
 - **v1** — Initial release, Claude Code support. [docs](https://github.com/thaitype/chief-agent-framework/tree/release/v1)
 - **v2** — Multi-agent support, skills system. [docs](https://github.com/thaitype/chief-agent-framework/tree/release/v2)
 - **v3** — Rebranded to Chief. `chief-` skill prefix. Repo moved to [`thaitype/chief`](https://github.com/thaitype/chief).
-- **v4** — Skills via `npx skills` (decoupled from install). Lazy `.chief/`. New skills: `/chief-init`, `/chief-rule`, `/chief-grill`, `/grill-design`, `/shape-up`, `/slim-down`. `answer-verifier-agent` replaces deprecated `review-plan-agent`.
+- **v4** — Skills via `npx skills` (decoupled from install). Lazy `.chief/`. New skills: `/chief-init`, `/chief-rule`, `/chief-grill`, `/grill-design`, `/shape-up`, `/slim-down`, `/chief-loop`, `/loop-readiness`. `answer-verifier-agent` replaces deprecated `review-plan-agent`.
 
 ## Branches
 
