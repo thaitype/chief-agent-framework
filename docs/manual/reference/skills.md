@@ -44,6 +44,16 @@ Recommended only when the goal is clear and well-scoped. Not recommended for lar
 
 ---
 
+### `/chief-loop`
+
+Runs chief-agent across as many batches as it takes to finish a milestone — batch after batch, no cap — writing one report per task instead of one per batch.
+
+Builds directly on `/chief-autopilot`'s auto mode: no stopping for human input on ambiguity. When a task hits ambiguity, a throwaway decision-support agent proposes 2–3 options; chief-agent still makes the final call, and the reasoning is recorded in that task's report. Requires goals and contracts to exist.
+
+If you want the "stop and ask a human" behavior instead, use `/chief-autopilot safe`.
+
+---
+
 ### `/chief-grill`
 
 Stateful, deep stress-test of a design or decision. Spawns `answer-verifier-agent` per question.
@@ -105,6 +115,16 @@ Use when you have a problem or idea but not yet a concrete requirement.
 Reduces a goal or spec that's too large for a single milestone.
 
 After writing goals, if the scope is too big, `/slim-down` trims it to a phase-sized piece, preserving the rest for a future milestone.
+
+---
+
+### `/loop-readiness`
+
+Reviews whether a plan is ready to run as an unattended loop — an autopilot, scheduled job, or long-running agent workflow with no human checking every step.
+
+Checks four dimensions: Definition of Ready, feedforward guidance, feedback/verification, and Definition of Done. Reports what's present, missing, and partial per dimension — no pass/fail verdict or single score. Nothing gets executed; this is a static review of the plan as described.
+
+Works from an existing plan file or by interviewing you (via `/grill-design` if available). Useful before `/chief-loop` or `/chief-autopilot` on a milestone that will run many iterations unattended.
 
 ---
 
